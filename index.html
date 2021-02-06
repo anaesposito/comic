@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ada Comics</title>
+</head>
+
+<body>
+
+    <header>
+        <div>Ada Comics</div>
+    </header>
+    <div class="background"></div>
+    <main>
+        <section class="explorer">
+            <h2>Búsqueda</h2>
+            <div>
+                <input type="text" aria-label="search" placeholder="Escribe aquí tu búsqueda">
+            </div>
+            <div>
+                <label for="type">Tipo</label>
+                <select name="type" id="">
+                    <option value="comic">Comics</option>
+                    <option value="character">Personaje</option>
+                </select>
+            </div>
+            <div>
+                <label for="order"></label>
+                <select name="order" id="">
+                    <option value="AZ">A-Z</option>
+                    <option value="ZA">Z-A</option>
+                    <option value="older">Más antiguos</option>
+                    <option value="newer">Más nuevos</option>
+                </select>
+            </div>
+            <button>Buscar</button>
+        </section>
+
+        <section>
+            <div>
+                <h2>Resultados</h2>
+                <p><span>0</span>Resultados Encontrados</p>
+            </div>
+
+            <div class="cards-layout"></div>
+        </section>
+    </main>
+
+    <footer class="firma-personal-footer">
+
+        <p class="firma-footer texto-final"> Hecho por <span class="firma-personal"><a class="firma-personal"
+                    href="https://anaesposito.github.io/portfolio/"> Ana
+                    Esposito </a></span></p>
+        <div class="redes firma-footer">
+            <a href="https://www.linkedin.com/in/ana-esposito-5a875184/" class="link-footer dos">
+                <i id="link-footer" class="fab devicon-linkedin-plain"></i></a>
+
+            <a href="https://github.com/anaesposito" class="link-footer dos"><i id="link-footer"
+                    class="fab devicon-github-plain"></i></a>
+        </div>
+    </footer>
+    <script src="main.js"></script>
+</body>
+
+</html>

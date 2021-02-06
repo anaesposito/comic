@@ -1,0 +1,50 @@
+#link-footer {
+  position: relative;
+  display: inline-block;
+  font-size: 40px;
+  font-weight: 800;
+  color: black;
+  overflow: hidden;
+  background: linear-gradient(to right, black, black 50%, #ff2873 50%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 100%;
+  background-position: 100%;
+  transition: background-position 275ms ease;
+  text-decoration: none;
+}
+
+#link-footer:hover {
+  background-position: 0 100%;
+}
+
+.redes {
+  font-size: 45px;
+}
+
+.firma-personal {
+  font-family: cookie;
+  font-size: 25px;
+  color: black;
+}
+
+.firma-personal-footer {
+  width: 100vw;
+  background-color: rgba(255, 255, 255, 0.486);
+  margin-top: 2%;
+}
+
+.firma-personal:hover {
+  color: #d81b60;
+}
+
+.firma-footer {
+  text-align: center;
+}
+
+.texto-final {
+  padding-top: 2, 5%;
+}
+
+/*# sourceMappingURL=style.css.map */
