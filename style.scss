@@ -1,12 +1,31 @@
+@import url("https://fonts.googleapis.com/css2?family=Cookie&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bangers&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
+// -----------------------------🖱️Variables
+$mainColor: rgb(155, 37, 37);
+$secondColor: black;
+$thirdColor: white;
+
+* {
+  margin: 0;
+  font-family: montserrat;
+}
+
 // Footer para corregir con SASS
 #link-footer {
   position: relative;
   display: inline-block;
   font-size: 40px;
   font-weight: 800;
-  color: black;
+  color: $thirdColor;
   overflow: hidden;
-  background: linear-gradient(to right, black, black 50%, #ff2873 50%);
+  background: linear-gradient(
+    to right,
+    $thirdColor,
+    $thirdColor,
+    50%,
+    $mainColor 50%
+  );
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -14,30 +33,99 @@
   background-position: 100%;
   transition: background-position 275ms ease;
   text-decoration: none;
+  &:hover {
+    background-position: 0 100%;
+  }
 }
-#link-footer:hover {
-  background-position: 0 100%;
-}
+
 .redes {
   font-size: 45px;
 }
 .firma-personal {
   font-family: cookie;
   font-size: 25px;
-  color: black;
+  color: $thirdColor;
 }
 .firma-personal-footer {
   width: 100vw;
-  background-color: rgba(255, 255, 255, 0.486);
+  background-color: $secondColor;
   margin-top: 2%;
+  &:hover {
+    color: $thirdColor;
+  }
 }
-.firma-personal:hover {
-  color: #d81b60;
-}
+
 .firma-footer {
   text-align: center;
+  color: $thirdColor;
 }
 .texto-final {
   padding-top: 2, 5%;
 }
 // fIN DE FOOTER PARA CORREGIR
+%centerFlex {
+  display: flex;
+  justify-content: center;
+}
+%rowFlex {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+header {
+  height: 400px;
+  @extend %centerFlex;
+  flex-direction: column;
+
+  h2 {
+    @extend %centerFlex;
+    padding-top: 1%;
+    padding-bottom: 1%;
+  }
+  div.background {
+    height: 400px;
+    background-image: url(img/background.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+  }
+}
+.cards-layout {
+  @extend %centerFlex;
+  @extend %rowFlex;
+  margin: auto;
+}
+
+.comic-article {
+  width: 200px;
+  height: auto;
+  margin: 20px 0 0 20px;
+  img {
+    width: 100%;
+  }
+}
+
+.explorer {
+  @extend %centerFlex;
+  // @extend %rowFlex;
+  flex-direction: column;
+  margin: auto;
+  margin-top: 4%;
+  h2 {
+    margin: auto;
+  }
+  div {
+    margin-right: 2%;
+  }
+}
+.search-options {
+  @extend %centerFlex;
+  @extend %rowFlex;
+}
+input,
+select {
+  background-color: transparent;
+  border: 0px solid;
+  height: 20px;
+  width: 160px;
+}
