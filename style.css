@@ -12,7 +12,7 @@
   font-weight: 800;
   color: white;
   overflow: hidden;
-  background: linear-gradient(to right, white, white, 50%, #9b2525 50%);
+  background: linear-gradient(to right, white, white, 50%, #c63b2d 50%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -50,7 +50,7 @@
   color: white;
 }
 
-.title-container, .search-options, .explorer, .cards-layout, header h2, header {
+.page-nav, .title-container, .search-options, .explorer, .cards-layout, header h2, header {
   display: flex;
   justify-content: center;
 }
@@ -76,17 +76,38 @@ header div.background {
   background-position: center;
 }
 
+main {
+  margin: 40px 200px 40px;
+}
+
+.search,
+.results {
+  margin: 40px 0 40px 80px;
+}
+
+.results {
+  margin-top: 60px;
+}
+.results p {
+  margin-top: 30px;
+}
+
 .cards-layout {
   margin: auto;
 }
 
 .comic-article {
   width: 200px;
-  height: auto;
-  margin: 20px 0 0 20px;
+  margin: 30px 0 0 30px;
 }
 .comic-article img {
   width: 100%;
+  height: 320px;
+  box-shadow: 0 26px 24px -16px rgba(0, 0, 0, 0.4);
+  transition: 0.2s;
+}
+.comic-article:hover {
+  transform: translateY(-3%);
 }
 
 .explorer {
@@ -143,7 +164,7 @@ header h2 {
   align-content: center;
   width: 10%;
   height: 100%;
-  background-color: #9b2525;
+  background-color: #c63b2d;
 }
 
 button {
@@ -155,6 +176,14 @@ button {
   box-shadow: 3px 3px 0 #222;
   font-family: bangers;
   font-size: 25px;
+}
+
+.page-nav {
+  margin-top: 3%;
+}
+
+svg:hover {
+  transform: scale(1.3);
 }
 
 /*# sourceMappingURL=style.css.map */

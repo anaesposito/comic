@@ -12,8 +12,19 @@ fetch(
       console.log(info.data.results);
       // console.log(comic.characters);
       cardsLayout.innerHTML += `<article>
-          <div class="comic-article"><img src="${comic.thumbnail.path}.${comic.thumbnail.extension}" alt=""></div>
+          <div class="comic-article"><img class="comic-thumbnail" src="${comic.thumbnail.path}.${comic.thumbnail.extension}" alt=""></div>
           <p></p>
       </article>`;
+    });
+    const thumbnails = document.querySelectorAll(".comic-thumbnail");
+
+    thumbnails.forEach((comic) => {
+      // console.log(comic.src);
+      if (
+        comic.src ==
+        "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
+      ) {
+        comic.src = "img/notfound.png";
+      }
     });
   });

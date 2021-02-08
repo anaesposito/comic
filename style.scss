@@ -1,7 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Bangers&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
 // -----------------------------🖱️Variables
-$mainColor: rgb(155, 37, 37);
+$mainColor: #c63b2d;
+$lightMainColor: #e74c3c;
 $secondColor: black;
 $thirdColor: white;
 
@@ -87,6 +88,22 @@ header {
     background-position: center;
   }
 }
+
+main {
+  margin: 40px 200px 40px;
+}
+.search,
+.results {
+  margin: 40px 0 40px 80px;
+}
+
+.results {
+  margin-top: 60px;
+  p {
+    margin-top: 30px;
+  }
+}
+
 .cards-layout {
   @extend %centerFlex;
   @extend %rowFlex;
@@ -95,16 +112,20 @@ header {
 
 .comic-article {
   width: 200px;
-  height: auto;
-  margin: 20px 0 0 20px;
+  margin: 30px 0 0 30px;
   img {
     width: 100%;
+    height: 320px;
+    box-shadow: 0 26px 24px -16px rgb(0 0 0 / 40%);
+    transition: 0.2s;
+  }
+  &:hover {
+    transform: translateY(-3%);
   }
 }
 
 .explorer {
   @extend %centerFlex;
-  // @extend %rowFlex;
   flex-direction: column;
   margin: auto;
   margin-top: 4%;
@@ -170,4 +191,13 @@ button {
   box-shadow: 3px 3px 0 #222;
   font-family: bangers;
   font-size: 25px;
+}
+
+.page-nav {
+  margin-top: 3%;
+  @extend %centerFlex;
+}
+
+svg:hover {
+  transform: scale(1.3);
 }
