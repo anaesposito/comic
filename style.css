@@ -110,6 +110,13 @@ main {
   transform: translateY(-3%);
 }
 
+.comic-title {
+  width: 200px;
+  height: auto;
+  margin-top: 10px;
+  text-align: center;
+}
+
 .explorer {
   flex-direction: column;
   margin: auto;
