@@ -11,56 +11,6 @@ $thirdColor: white;
   font-family: montserrat;
 }
 
-// Footer para corregir con SASS
-#link-footer {
-  position: relative;
-  display: inline-block;
-  font-size: 40px;
-  font-weight: 800;
-  color: $thirdColor;
-  overflow: hidden;
-  background: linear-gradient(
-    to right,
-    $thirdColor,
-    $thirdColor,
-    50%,
-    $mainColor 50%
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-size: 200% 100%;
-  background-position: 100%;
-  transition: background-position 275ms ease;
-  text-decoration: none;
-  &:hover {
-    background-position: 0 100%;
-  }
-}
-
-.redes {
-  font-size: 45px;
-}
-.firma-personal {
-  font-family: bangers;
-  font-size: 25px;
-  color: $thirdColor;
-}
-.firma-personal-footer {
-  width: 100vw;
-  background-color: $secondColor;
-  margin-top: 2%;
-  &:hover {
-    color: $thirdColor;
-  }
-}
-
-.firma-footer {
-  padding-top: 2%;
-  text-align: center;
-  color: $thirdColor;
-}
-// fIN DE FOOTER PARA CORREGIR
 %centerFlex {
   display: flex;
   justify-content: center;
@@ -208,3 +158,53 @@ button {
 svg:hover {
   transform: scale(1.3);
 }
+// Footer para corregir con SASS
+#link-footer {
+  position: relative;
+  display: inline-block;
+  font-size: 40px;
+  font-weight: 800;
+  color: $thirdColor;
+  overflow: hidden;
+  background: linear-gradient(
+    to right,
+    $thirdColor,
+    $thirdColor,
+    50%,
+    $mainColor 50%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 100%;
+  background-position: 100%;
+  transition: background-position 275ms ease;
+  text-decoration: none;
+  &:hover {
+    background-position: 0 100%;
+  }
+}
+
+.redes {
+  font-size: 45px;
+}
+.firma-personal {
+  font-family: bangers;
+  font-size: 25px;
+  color: $thirdColor;
+}
+.firma-personal-footer {
+  width: 100vw;
+  background-color: $secondColor;
+  margin-top: 2%;
+  &:hover {
+    color: $thirdColor;
+  }
+}
+
+.firma-footer {
+  padding-top: 2%;
+  text-align: center;
+  color: $thirdColor;
+}
+// fIN DE FOOTER PARA CORREGIR
