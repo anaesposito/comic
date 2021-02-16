@@ -46,40 +46,45 @@ const displayingContent = (typeOfContent, typeOfOrder, searchInput) => {
       return res.json();
     })
     .then((info) => {
+      // console.log(cardsGenerator(info));
       cardsGenerator(info);
     });
 };
+// console.log(displayingContent("comics", "title"));
 displayingContent("comics", "title");
 // ----------------------  End of Cards Generations
 
 // --------------------------Beginning of Cards Generator for Comics
 const cardsGenerator = (info) => {
   cardsLayout.innerHTML = "";
-  info.data.results.map((content) => {
-    if (checkingFilterType() === "comics") {
+  if (checkingFilterType() === "comics") {
+    info.data.results.map((content) => {
       cardComicContent(content);
-    } else {
+    });
+  } else {
+    info.data.results.map((content) => {
       cardCharacterContent(content);
-    }
-  });
-  const thumbnails = document.querySelectorAll(".comic-thumbnail");
+    });
 
-  thumbnails.forEach((content) => {
-    if (
-      content.src ==
-      "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
-    ) {
-      content.src = "img/notfound.png";
-    }
-  });
+    const thumbnails = document.querySelectorAll(".comic-thumbnail");
+
+    thumbnails.forEach((content) => {
+      if (
+        content.src ==
+        "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
+      ) {
+        content.src = "img/notfound.png";
+      }
+    });
+  }
 };
 
 // ------------------------- End of Cards Generator for Comics
 
-const cardComicContent = (comic) => {
+const cardComicContent = (content) => {
   return (cardsLayout.innerHTML += `<article class="comic-article"> 
-  <img class="comic-thumbnail" src="${comic.thumbnail.path}.${comic.thumbnail.extension}" alt="">
-  <p class="comic-title">${comic.title}</p>
+  <img class="comic-thumbnail" src="${content.thumbnail.path}.${content.thumbnail.extension}" alt="">
+  <p class="comic-title">${content.title}</p>
 </article>`);
 };
 
