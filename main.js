@@ -102,18 +102,24 @@ const cardCharacterContent = (character) => {
 form.onsubmit = (e) => {
   e.preventDefault();
   submitButton.onclick = () => {
-    thereIsSearch();
-    checkingFilterType();
+    searchURL();
+    checkingTypeOfContent();
   };
 };
 
 const checkingFilterType = () => {
   if (typeFilter.value === "comic") {
-    // orderBy("comics", "title");
     return "comics";
   } else {
+    return "characters";
+  }
+};
+
+const checkingTypeOfContent = () => {
+  if (typeFilter.value === "comic") {
+    orderBy("comics", "title");
+  } else {
     orderBy("characters", "name");
-    // return "characters";
   }
 };
 
