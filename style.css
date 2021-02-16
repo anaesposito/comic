@@ -1,11 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Bangers&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
-* {
-  margin: 0;
-  font-family: montserrat;
-}
-
-.page-nav, .title-container, .search-options, .explorer, .cards-layout, header h2, header {
+.page-nav, .title-container, .explorer, .cards-layout, header h2, header {
   display: flex;
   justify-content: center;
 }
@@ -13,6 +8,11 @@
 .search-options, .cards-layout {
   flex-direction: row;
   flex-wrap: wrap;
+}
+
+* {
+  margin: 0;
+  font-family: montserrat;
 }
 
 header {
@@ -90,6 +90,20 @@ main {
 
 .search-options {
   font-size: 25px;
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 80px;
+}
+
+#search-input {
+  position: relative;
+  width: 30vw;
+}
+
+#search-icon {
+  position: absolute;
+  left: 15%;
+  top: 82%;
 }
 
 input,
@@ -98,12 +112,13 @@ select {
   border: 0px solid;
   height: 20px;
   font-size: 20px;
-  margin-right: 60px;
+  margin-right: 50px;
   font-weight: bold;
 }
 
 select {
-  width: 100px;
+  width: 140px;
+  height: 100%;
 }
 
 input {
@@ -141,6 +156,7 @@ button {
   border: 1px solid #222;
   box-shadow: 3px 3px 0 #222;
   font-family: bangers;
+  width: 6vw;
   font-size: 25px;
 }
 
@@ -195,6 +211,71 @@ svg:hover {
   padding-top: 2%;
   text-align: center;
   color: white;
+}
+
+/* // Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 1024px) and (max-height: 1370px) {
+  main,
+.search,
+.search-options,
+.results,
+input,
+select {
+    margin: 0;
+    width: 100%;
+    margin-left: 2%;
+    font-size: 15px;
+  }
+
+  #background,
+header {
+    height: 50vh;
+  }
+
+  .title h2 {
+    margin: 0;
+  }
+
+  .search-options {
+    display: flex;
+    flex-direction: row;
+  }
+  .search-options div {
+    margin-top: 10%;
+  }
+
+  #search-input {
+    width: 90vw;
+  }
+
+  label {
+    display: flex;
+    flex-direction: row;
+  }
+
+  #order {
+    margin-right: 140px;
+  }
+
+  button {
+    margin: auto;
+    margin-top: 10%;
+    width: 40vw;
+  }
+
+  h2 {
+    margin-top: 10%;
+  }
+}
+@media (min-width: 1024px) and (max-height: 1370px) {
+  #order {
+    margin-right: 140px;
+  }
+
+  button {
+    width: 20vw;
+    margin: 40px;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */

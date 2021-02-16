@@ -20,7 +20,7 @@
                 </h2>
             </div>
         </div>
-        <div class="background"></div>
+        <div class="background" id="background"></div>
     </header>
 
     <main>
@@ -31,22 +31,25 @@
             </div>
             <div class="search-options">
                 <div>
-                    <label for="search">
-                        <input id="search-input" type="search" aria-label="search"
-                            placeholder="Escribe aquí tu búsqueda">
-                    </label>
-                </div>
-                <div>
                     <form action="">
-                        <label for="type">Tipo
-                            <select name="type" id="type">
-                                <option value="comic">Comics</option>
-                                <option value="character">Personaje</option>
+                        <label for="search">
+                            <input id="search-input" type="search" aria-label="search"
+                                placeholder="       Escribe aquí tu búsqueda">
+                            <!-- <img id="search-icon"
+                            src="https://img.icons8.com/pastel-glyph/24/000000/search--v1.png" /> -->
                         </label>
-                        </select>
                 </div>
                 <div>
-                    <label for="order">
+
+                    <label for="type">Tipo
+                        <select name="type" id="type">
+                            <option value="comic">Comics</option>
+                            <option value="character">Personaje</option>
+                    </label>
+                    </select>
+                </div>
+                <div>
+                    <label for="order">Orden
                         <select name="order" id="order">
                             <option value="az">A-Z</option>
                             <option value="za">Z-A</option>
