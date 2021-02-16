@@ -25,6 +25,7 @@
 
     <main>
         <section class="explorer">
+
             <div class="search">
                 <h2>Búsqueda</h2>
             </div>
@@ -36,24 +37,26 @@
                     </label>
                 </div>
                 <div>
-                    <label for="type">Tipo
-                        <select name="type" id="">
-                            <option value="comic">Comics</option>
-                            <option value="character">Personaje</option>
-                    </label>
-                    </select>
+                    <form action="">
+                        <label for="type">Tipo
+                            <select name="type" id="type">
+                                <option value="comic">Comics</option>
+                                <option value="character">Personaje</option>
+                        </label>
+                        </select>
                 </div>
                 <div>
                     <label for="order">
-                        <select name="order" id="">
-                            <option value="AZ">A-Z</option>
-                            <option value="ZA">Z-A</option>
+                        <select name="order" id="order">
+                            <option value="az">A-Z</option>
+                            <option value="za">Z-A</option>
                             <option value="older">Más antiguos</option>
                             <option value="newer">Más nuevos</option>
                     </label>
                     </select>
                 </div>
-                <button>Buscar</button>
+                <button id="form-submit-button" type="submit">Buscar</button>
+                </form>
             </div>
         </section>
 
