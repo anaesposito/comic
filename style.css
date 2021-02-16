@@ -98,6 +98,8 @@ main {
 #search-input {
   position: relative;
   width: 30vw;
+  padding-left: 32px;
+  box-sizing: border-box;
 }
 
 #search-icon {
