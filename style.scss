@@ -233,10 +233,16 @@ svg:hover {
 }
 //-------------💥End of Footer
 
+.search-background {
+  background-image: url(img/search--v1.png);
+  background-position: left;
+  background-repeat: no-repeat;
+}
+
 //-------------💥Beginning of Responsive
 
 /* // Extra small devices (portrait phones, less than 576px) */
-@media (max-width: 1024px) and (max-height: 1370px) {
+@media (max-width: 1024px) and (max-height: 970px) {
   main,
   .search,
   .search-options,
@@ -285,12 +291,18 @@ svg:hover {
   }
 }
 
-@media (min-width: 1024px) and (max-height: 1370px) {
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) and (max-width: 1199.98px) {
   #order {
     margin-right: 140px;
   }
+
   button {
     width: 20vw;
     margin: 40px;
+  }
+  #search-icon {
+    left: 17%;
+    top: 59%;
   }
 }
