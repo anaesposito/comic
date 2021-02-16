@@ -7,14 +7,14 @@ const orderFilter = document.querySelector("#order");
 // ------------------------- Beginning of Search
 const searchInput = document.querySelector("#search-input");
 
-const SearchIsOn = () => {
+const thereIsSearch = () => {
   if (searchInput.value) {
     return true;
   }
 };
 
 const searchURL = (typeOfOrder) => {
-  if (SearchIsOn()) {
+  if (thereIsSearch()) {
     const searchValue = searchInput.value.toLowerCase();
     return `${typeOfOrder}StartsWith=${searchValue}&`;
   } else {
@@ -102,17 +102,18 @@ const cardCharacterContent = (character) => {
 form.onsubmit = (e) => {
   e.preventDefault();
   submitButton.onclick = () => {
+    thereIsSearch();
     checkingFilterType();
   };
 };
 
 const checkingFilterType = () => {
   if (typeFilter.value === "comic") {
-    orderBy("comics", "title");
+    // orderBy("comics", "title");
     return "comics";
   } else {
     orderBy("characters", "name");
-    return "characters";
+    // return "characters";
   }
 };
 
