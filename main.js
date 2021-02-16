@@ -46,40 +46,52 @@ const displayingContent = (typeOfContent, typeOfOrder, searchInput) => {
       return res.json();
     })
     .then((info) => {
-      cardsGeneratorComics(info);
-      console.log(info);
-      // if (checkingFilterType() === "comics") {
-      //   cardsGeneratorComics(info);
-      // } else {
-      //   cardsGeneratorsCharacters(info);
-      // }
+      cardsGenerator(info);
     });
 };
 displayingContent("comics", "title");
 // ----------------------  End of Cards Generations
 
 // --------------------------Beginning of Cards Generator for Comics
-const cardsGeneratorComics = (info) => {
+const cardsGenerator = (info) => {
   cardsLayout.innerHTML = "";
-  info.data.results.map((comic) => {
-    cardsLayout.innerHTML += `<article class="comic-article"> 
-      <img class="comic-thumbnail" src="${comic.thumbnail.path}.${comic.thumbnail.extension}" alt="">
-      <p class="comic-title">${comic.title}</p>
-  </article>`;
+  info.data.results.map((content) => {
+    if (checkingFilterType() === "comics") {
+      cardComicContent(content);
+    } else {
+      cardCharacterContent(content);
+    }
   });
   const thumbnails = document.querySelectorAll(".comic-thumbnail");
 
-  thumbnails.forEach((comic) => {
+  thumbnails.forEach((content) => {
     if (
-      comic.src ==
+      content.src ==
       "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
     ) {
-      comic.src = "img/notfound.png";
+      content.src = "img/notfound.png";
     }
   });
 };
 
 // ------------------------- End of Cards Generator for Comics
+
+const cardComicContent = (comic) => {
+  return (cardsLayout.innerHTML += `<article class="comic-article"> 
+  <img class="comic-thumbnail" src="${comic.thumbnail.path}.${comic.thumbnail.extension}" alt="">
+  <p class="comic-title">${comic.title}</p>
+</article>`);
+};
+
+const cardCharacterContent = (character) => {
+  return (cardsLayout.innerHTML += `  <article class="character-article">
+  <img class="comic-thumbnail" src="${character.thumbnail.path}.${character.thumbnail.extension}"
+      alt="">
+  <div class="">
+      <p class="character-title">${character.name}</p>
+  </div>
+</article>`);
+};
 
 // ------------------ Beginning of Filters
 form.onsubmit = (e) => {
