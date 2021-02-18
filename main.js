@@ -46,13 +46,32 @@ const displayingContent = (typeOfContent, typeOfOrder, searchInput) => {
       return res.json();
     })
     .then((info) => {
-      // console.log(cardsGenerator(info));
       cardsGenerator(info);
     });
 };
-// console.log(displayingContent("comics", "title"));
+
 displayingContent("comics", "title");
 // ----------------------  End of Cards Generations
+const seeCharInfo = (characters) => {
+  characters.forEach((char) => {
+    char.onclick = () => {
+      let characterId = char.dataset.id;
+
+      console.log(characterId);
+      fetch(
+        `https://gateway.marvel.com:443/v1/public/characters/${characterId}?apikey=5b28d7dfab933cb0faf686ed9e76a30a`
+      )
+        .then((res) => {
+          return res.json();
+        })
+        .then((info) => {
+          info.data.results.map((info) => {
+            characterIndivualDisplay(info);
+          });
+        });
+    };
+  });
+};
 
 // --------------------------Beginning of Cards Generator for Comics
 const cardsGenerator = (info) => {
@@ -66,6 +85,18 @@ const cardsGenerator = (info) => {
       cardCharacterContent(content);
     });
 
+    // hacer una funcion para generate algo
+    const characters = document.querySelectorAll(".character-article");
+    // const replaceEmptyTitle = () => {
+    //   const characterName = document.querySelector(".char-name");
+    //   console.log(characterName);
+    //   if (characterName.textContent === "undefined") {
+    //     characterName.textContent = "Sin Nombre";
+    //   }
+    // };
+    seeCharInfo(characters);
+    // replaceEmptyTitle();
+    // hacer una funcion a parte para esto como generateThumbnails
     const thumbnails = document.querySelectorAll(".comic-thumbnail");
 
     thumbnails.forEach((content) => {
@@ -82,17 +113,17 @@ const cardsGenerator = (info) => {
 // ------------------------- End of Cards Generator for Comics
 
 const cardComicContent = (content) => {
-  return (cardsLayout.innerHTML += `<article class="comic-article"> 
+  return (cardsLayout.innerHTML += `<article class="comic-article"  data-id="${content.id}"> 
   <img class="comic-thumbnail" src="${content.thumbnail.path}.${content.thumbnail.extension}" alt="">
   <p class="comic-title">${content.title}</p>
 </article>`);
 };
 
 const cardCharacterContent = (character) => {
-  return (cardsLayout.innerHTML += `  <article class="character-article">
+  return (cardsLayout.innerHTML += `  <article class="character-article" data-id="${character.id}">
   <img class="comic-thumbnail" src="${character.thumbnail.path}.${character.thumbnail.extension}"
       alt="">
-  <div class="">
+  <div class="background-char-title">
       <p class="character-title">${character.name}</p>
   </div>
 </article>`);
@@ -134,3 +165,25 @@ const orderBy = (type, order) => {
     displayingContent(type, "focDate");
   }
 };
+
+//-------------💥Beginning of Character on click
+const charactersDisplay = () => {};
+
+const characterIndivualDisplay = (character) => {
+  cardsLayout.innerHTML = "";
+  cardsLayout.innerHTML += `   
+  <article class="char-content">
+      <img class="character-thumbnail" src="${character.thumbnail.path}.${character.thumbnail.extension}"
+          alt="${character.name}">
+      <div class="char-title">
+          <h2 class="char-name">${character.name}</h2>
+          <p class="character-description">${character.description}</p>
+      </div>
+  </article>`;
+};
+
+//-------------💥End of Character on click
+
+//-------------💥Beginning of Comic on click
+
+//-------------💥End of Comic on click
