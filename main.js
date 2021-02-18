@@ -1,8 +1,9 @@
-const cardsLayout = document.querySelector(".cards-layout");
+const comicsCardLayout = document.querySelector(".cards-layout");
 const form = document.querySelector("form");
 const submitButton = document.querySelector("#form-submit-button");
 const typeFilter = document.querySelector("#type");
 const orderFilter = document.querySelector("#order");
+const characterCardLayout = document.querySelector(".character-layout");
 
 // ------------------------- Beginning of Search
 const searchInput = document.querySelector("#search-input");
@@ -52,30 +53,59 @@ const displayingContent = (typeOfContent, typeOfOrder, searchInput) => {
 
 displayingContent("comics", "title");
 // ----------------------  End of Cards Generations
-const seeCharInfo = (characters) => {
+const getCharInfoByClick = (characters) => {
   characters.forEach((char) => {
     char.onclick = () => {
       let characterId = char.dataset.id;
-
-      console.log(characterId);
-      fetch(
-        `https://gateway.marvel.com:443/v1/public/characters/${characterId}?apikey=5b28d7dfab933cb0faf686ed9e76a30a`
-      )
-        .then((res) => {
-          return res.json();
-        })
-        .then((info) => {
-          info.data.results.map((info) => {
-            characterIndivualDisplay(info);
-          });
-        });
+      displayingCharacterInfo(characterId);
     };
   });
 };
 
+const displayingCharacterInfo = (characterId) => {
+  fetch(
+    `https://gateway.marvel.com:443/v1/public/characters/${characterId}?apikey=5b28d7dfab933cb0faf686ed9e76a30a`
+  )
+    .then((res) => {
+      return res.json();
+    })
+    .then((info) => {
+      info.data.results.map((info) => {
+        characterIndivualDisplay(info);
+        // listOfComicsByChar(info);
+        // cardCharacterContent(info);
+      });
+      info.data.results.map((content) => {
+        let listOfComics = content.comics;
+        let comicId = content.comics.items;
+        comicId.map((comic) => {
+          let sourceOfComic = comic.resourceURI;
+          displayinListOfComics(sourceOfComic);
+        });
+      });
+    });
+};
+
+// const displayingComicInfo = (characterId) => {
+//   fetch(
+//     `https://gateway.marvel.com:443/v1/public/characters/${characterId}?apikey=5b28d7dfab933cb0faf686ed9e76a30a`
+//   )
+
+const displayinListOfComics = (comicId) => {
+  fetch(`${comicId}?apikey=5b28d7dfab933cb0faf686ed9e76a30a`)
+    .then((res) => {
+      return res.json();
+    })
+    .then((info) => {
+      info.data.results.map((info) => {
+        cardComicContent(info);
+      });
+    });
+};
+
 // --------------------------Beginning of Cards Generator for Comics
 const cardsGenerator = (info) => {
-  cardsLayout.innerHTML = "";
+  comicsCardLayout.innerHTML = "";
   if (checkingFilterType() === "comics") {
     info.data.results.map((content) => {
       cardComicContent(content);
@@ -94,8 +124,8 @@ const cardsGenerator = (info) => {
     //     characterName.textContent = "Sin Nombre";
     //   }
     // };
-    seeCharInfo(characters);
-    // replaceEmptyTitle();
+    getCharInfoByClick(characters);
+
     // hacer una funcion a parte para esto como generateThumbnails
     const thumbnails = document.querySelectorAll(".comic-thumbnail");
 
@@ -113,14 +143,14 @@ const cardsGenerator = (info) => {
 // ------------------------- End of Cards Generator for Comics
 
 const cardComicContent = (content) => {
-  return (cardsLayout.innerHTML += `<article class="comic-article"  data-id="${content.id}"> 
+  return (comicsCardLayout.innerHTML += `<article class="comic-article"  data-id="${content.id}"> 
   <img class="comic-thumbnail" src="${content.thumbnail.path}.${content.thumbnail.extension}" alt="">
   <p class="comic-title">${content.title}</p>
 </article>`);
 };
 
 const cardCharacterContent = (character) => {
-  return (cardsLayout.innerHTML += `  <article class="character-article" data-id="${character.id}">
+  return (comicsCardLayout.innerHTML += `  <article class="character-article" data-id="${character.id}">
   <img class="comic-thumbnail" src="${character.thumbnail.path}.${character.thumbnail.extension}"
       alt="">
   <div class="background-char-title">
@@ -169,19 +199,29 @@ const orderBy = (type, order) => {
 //-------------💥Beginning of Character on click
 const charactersDisplay = () => {};
 
-const characterIndivualDisplay = (character) => {
-  cardsLayout.innerHTML = "";
-  cardsLayout.innerHTML += `   
+const characterIndivualDisplay = (char) => {
+  comicsCardLayout.innerHTML = "";
+  characterCardLayout.innerHTML += `   
   <article class="char-content">
-      <img class="character-thumbnail" src="${character.thumbnail.path}.${character.thumbnail.extension}"
-          alt="${character.name}">
+      <img class="character-thumbnail" src="${char.thumbnail.path}.${char.thumbnail.extension}"
+          alt="${char.name}">
       <div class="char-title">
-          <h2 class="char-name">${character.name}</h2>
-          <p class="character-description">${character.description}</p>
+          <h2 class="char-name">${char.name}</h2>
+          <p class="character-description">${char.description}</p>
       </div>
   </article>`;
 };
 
+// const listOfComicsByChar = (info) => {
+//   info.data.map((content) => {
+//     let listOfComics = content.comics;
+//     listOfComics.map((comic) => {
+//       let comicId = comic.id;
+//       console.log(comicId);
+//       return comicId;
+//     });
+//   });
+// };
 //-------------💥End of Character on click
 
 //-------------💥Beginning of Comic on click
