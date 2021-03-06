@@ -70,16 +70,17 @@ const checkingTypeOfArticle = (typeOfArticle, info) => {
   }
 };
 
-const gettingExtraInfoComics = (info) => {
-  info.dates.map((content) => {
-    getTheDate(content);
-  });
-};
+// const getTheDate = (content) => {
+//   let newDate = new Date(content.date);
+//   // console.log("cuantas fechas", content.date);
+//   // newDate.type === "focDate"
+//   //   ? (newDate = newDate.toLocaleDateString())
+//   //   : "Sin Fecha Disponible";
 
-const getTheDate = (content) => {
-  let newDate = new Date(content.date);
-  newDate = newDate.toLocaleDateString();
-};
+//   // newDate = newDate.toLocaleDateString();
+//   console.log(newDate);
+//   return newDate;
+// };
 
 const displayingArticleInfo = (typeOfArticle, articleId) => {
   fetch(
@@ -110,9 +111,13 @@ const getUriCollectionComics = (comic) => {
   let comicId = comic.comics.items;
   comicId.map((comic) => {
     let sourceOfComic = comic.resourceURI;
-    console.log(sourceOfComic);
+    // console.log(sourceOfComic);
     displayingListOfArticles(sourceOfComic);
   });
+};
+
+const getUriCreators = (content) => {
+  displayingListOfArticles(content.creators.collectionURI);
 };
 
 const getUriCollectionChars = (content) => {
@@ -126,9 +131,17 @@ const displayingListOfArticles = (content) => {
     })
     .then((info) => {
       info.data.results.map((info) => {
-        cardComicContent(info);
+        content.includes("creators")
+          ? displayingCreatorsInfo(info)
+          : cardComicContent(info);
       });
     });
+};
+
+const displayingCreatorsInfo = (info) => {
+  const fullName = info.firstName + " " + info.lastName;
+  const creatorsInfo = document.querySelector(".creators-info");
+  creatorsInfo.innerHTML = `${fullName}`;
 };
 
 // --------------------------Beginning of Cards Generator for Comics
@@ -239,25 +252,48 @@ const characterIndivualDisplay = (char) => {
 
 //-------------💥Beginning of Comic Displayed
 const comicIndivualDisplay = (comic) => {
-  // gettingExtraInfoComics(comic);
+  console.log(comic);
+  let fullName = "";
+  getUriCollectionChars(comic);
+  getUriCreators(comic);
+
+  // console.log("probando uri", getUriCollectionChars(comic));
+  // console.log(displayingListOfArticles(comic));
   comicsCardLayout.innerHTML = "";
   characterCardLayout.innerHTML += `   
   <article class="article-content">
-      <img class="article-thumbnail" src="${comic.thumbnail.path}.${comic.thumbnail.extension}"
+      <img class="article-thumbnail" src="${comic.thumbnail.path}.${
+    comic.thumbnail.extension
+  }"
           alt="${comic.title}">
       <div>
           <h2>${comic.title}</h2>
           <h3>Publicado</h3>
-          <p>${comic.dates}</p>
+          <p>${getComicDate(comic)}</p>
           <h3>Guionistas</h3>
-          <p>${comic.creators.items}</p>
+
+          <p class="creators-info">${fullName}</p>
           <h3>Descripción</h3>
-          <p>${comic.description}</p>
+          <p>${
+            comic.description == null
+              ? "Descripción no disponible"
+              : comic.description
+          }</p>
       </div>
   </article>`;
 };
 //-------------💥End of ComicDisplayed
 
+const getComicDate = (info) => {
+  let newDate = "";
+  info.dates.map((content) => {
+    if (content.type == "focDate") {
+      newDate = new Date(content.date);
+      newDate = newDate.toLocaleDateString();
+    }
+  });
+  return newDate;
+};
 //-------------💥Reset the cards section
 
 const resetCardSection = () => {
