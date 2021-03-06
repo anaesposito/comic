@@ -53,46 +53,74 @@ const displayingContent = (typeOfContent, typeOfOrder, searchInput) => {
 
 displayingContent("comics", "title");
 // ----------------------  End of Cards Generations
-const getCharInfoByClick = (characters) => {
-  characters.forEach((char) => {
-    char.onclick = () => {
-      let characterId = char.dataset.id;
-      displayingCharacterInfo(characterId);
+const getArticleInfo = (typeOfArticle, article) => {
+  article.forEach((art) => {
+    art.onclick = () => {
+      let articleId = art.dataset.id;
+      displayingArticleInfo(typeOfArticle, articleId);
     };
   });
 };
+// for the displayingArticleInfo
+const checkingTypeOfArticle = (typeOfArticle, info) => {
+  if (typeOfArticle === "comics") {
+    comicIndivualDisplay(info);
+  } else if (typeOfArticle === "characters") {
+    characterIndivualDisplay(info);
+  }
+};
 
-const displayingCharacterInfo = (characterId) => {
+const gettingExtraInfoComics = (info) => {
+  info.dates.map((content) => {
+    getTheDate(content);
+  });
+};
+
+const getTheDate = (content) => {
+  let newDate = new Date(content.date);
+  newDate = newDate.toLocaleDateString();
+};
+
+const displayingArticleInfo = (typeOfArticle, articleId) => {
   fetch(
-    `https://gateway.marvel.com:443/v1/public/characters/${characterId}?apikey=5b28d7dfab933cb0faf686ed9e76a30a`
+    `https://gateway.marvel.com:443/v1/public/${typeOfArticle}/${articleId}?apikey=5b28d7dfab933cb0faf686ed9e76a30a`
   )
     .then((res) => {
       return res.json();
     })
     .then((info) => {
       info.data.results.map((info) => {
-        characterIndivualDisplay(info);
-        // listOfComicsByChar(info);
-        // cardCharacterContent(info);
+        // characterIndivualDisplay(info);
+        checkingTypeOfArticle(typeOfArticle, info);
+        // comicIndivualDisplay
       });
       info.data.results.map((content) => {
-        let listOfComics = content.comics;
-        let comicId = content.comics.items;
-        comicId.map((comic) => {
-          let sourceOfComic = comic.resourceURI;
-          displayinListOfComics(sourceOfComic);
-        });
+        typeOfArticle == "comics"
+          ? getUriCollectionChars(content)
+          : getUriCollectionComics(content);
+
+        // console.log("uri", content.characters.collectionURI);
+        // aca diferenciar comic de character y traer el uri del character.
+
+        // console.log("content", content);
       });
     });
 };
+const getUriCollectionComics = (comic) => {
+  let comicId = comic.comics.items;
+  comicId.map((comic) => {
+    let sourceOfComic = comic.resourceURI;
+    console.log(sourceOfComic);
+    displayingListOfArticles(sourceOfComic);
+  });
+};
 
-// const displayingComicInfo = (characterId) => {
-//   fetch(
-//     `https://gateway.marvel.com:443/v1/public/characters/${characterId}?apikey=5b28d7dfab933cb0faf686ed9e76a30a`
-//   )
+const getUriCollectionChars = (content) => {
+  displayingListOfArticles(content.characters.collectionURI);
+};
 
-const displayinListOfComics = (comicId) => {
-  fetch(`${comicId}?apikey=5b28d7dfab933cb0faf686ed9e76a30a`)
+const displayingListOfArticles = (content) => {
+  fetch(`${content}?apikey=5b28d7dfab933cb0faf686ed9e76a30a`)
     .then((res) => {
       return res.json();
     })
@@ -110,36 +138,31 @@ const cardsGenerator = (info) => {
     info.data.results.map((content) => {
       cardComicContent(content);
     });
+    const comics = document.querySelectorAll(".comic-article");
+    getArticleInfo("comics", comics);
   } else {
     info.data.results.map((content) => {
       cardCharacterContent(content);
     });
 
-    // hacer una funcion para generate algo
     const characters = document.querySelectorAll(".character-article");
-    // const replaceEmptyTitle = () => {
-    //   const characterName = document.querySelector(".char-name");
-    //   console.log(characterName);
-    //   if (characterName.textContent === "undefined") {
-    //     characterName.textContent = "Sin Nombre";
-    //   }
-    // };
-    getCharInfoByClick(characters);
-
-    // hacer una funcion a parte para esto como generateThumbnails
-    const thumbnails = document.querySelectorAll(".comic-thumbnail");
-
-    thumbnails.forEach((content) => {
-      if (
-        content.src ==
-        "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
-      ) {
-        content.src = "img/notfound.png";
-      }
-    });
+    getArticleInfo("characters", characters);
+    generateThumbnails();
   }
 };
 
+const generateThumbnails = () => {
+  const thumbnails = document.querySelectorAll(".comic-thumbnail");
+
+  thumbnails.forEach((content) => {
+    if (
+      content.src ==
+      "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
+    ) {
+      content.src = "img/notfound.png";
+    }
+  });
+};
 // ------------------------- End of Cards Generator for Comics
 
 const cardComicContent = (content) => {
@@ -163,6 +186,7 @@ const cardCharacterContent = (character) => {
 form.onsubmit = (e) => {
   e.preventDefault();
   submitButton.onclick = () => {
+    resetCardSection();
     searchURL();
     checkingTypeOfContent();
   };
@@ -196,8 +220,7 @@ const orderBy = (type, order) => {
   }
 };
 
-//-------------💥Beginning of Character on click
-const charactersDisplay = () => {};
+//-------------💥Beginning of Character Displayed
 
 const characterIndivualDisplay = (char) => {
   comicsCardLayout.innerHTML = "";
@@ -205,25 +228,47 @@ const characterIndivualDisplay = (char) => {
   <article class="char-content">
       <img class="character-thumbnail" src="${char.thumbnail.path}.${char.thumbnail.extension}"
           alt="${char.name}">
-      <div class="char-title">
-          <h2 class="char-name">${char.name}</h2>
-          <p class="character-description">${char.description}</p>
+      <div>
+          <h2>${char.name}</h2>
+          <p>${char.description}</p>
       </div>
   </article>`;
 };
 
-// const listOfComicsByChar = (info) => {
-//   info.data.map((content) => {
-//     let listOfComics = content.comics;
-//     listOfComics.map((comic) => {
-//       let comicId = comic.id;
-//       console.log(comicId);
-//       return comicId;
-//     });
-//   });
+//-------------💥End of Character Displayed
+
+//-------------💥Beginning of Comic Displayed
+const comicIndivualDisplay = (comic) => {
+  // gettingExtraInfoComics(comic);
+  comicsCardLayout.innerHTML = "";
+  characterCardLayout.innerHTML += `   
+  <article class="article-content">
+      <img class="article-thumbnail" src="${comic.thumbnail.path}.${comic.thumbnail.extension}"
+          alt="${comic.title}">
+      <div>
+          <h2>${comic.title}</h2>
+          <h3>Publicado</h3>
+          <p>${comic.dates}</p>
+          <h3>Guionistas</h3>
+          <p>${comic.creators.items}</p>
+          <h3>Descripción</h3>
+          <p>${comic.description}</p>
+      </div>
+  </article>`;
+};
+//-------------💥End of ComicDisplayed
+
+//-------------💥Reset the cards section
+
+const resetCardSection = () => {
+  comicsCardLayout.innerHTML = "";
+  characterCardLayout.innerHTML = "";
+};
+
+// const replaceEmptyTitle = () => {
+//   const characterName = document.querySelector(".char-name");
+//   console.log(characterName);
+//   if (characterName.textContent === "undefined") {
+//     characterName.textContent = "Sin Nombre";
+//   }
 // };
-//-------------💥End of Character on click
-
-//-------------💥Beginning of Comic on click
-
-//-------------💥End of Comic on click

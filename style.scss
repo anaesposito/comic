@@ -266,7 +266,8 @@ svg:hover {
   margin-top: 40px;
 }
 
-.char-content {
+.char-content,
+.article-content {
   display: flex;
   img,
   h2,
@@ -274,7 +275,8 @@ svg:hover {
     @extend %margins;
   }
 }
-.character-thumbnail {
+.character-thumbnail,
+.article-thumbnail {
   width: 350px;
   height: auto;
 }
@@ -338,7 +340,8 @@ svg:hover {
 @media (min-width: 992px) and (max-width: 1199.98px) {
   .search,
   .results,
-  .char-content {
+  .char-content,
+  .article-content {
     margin: 0;
   }
   #order {
@@ -357,10 +360,12 @@ svg:hover {
 @media (min-width: 1200px) and (max-width: 1650px) {
   .search,
   .results,
-  .char-content {
+  .char-content,
+  .article-content {
     margin: 0;
   }
   .char-content,
+  .article-content,
   #order-content,
   button {
     margin-top: 40px;
