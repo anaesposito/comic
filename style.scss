@@ -184,6 +184,12 @@ button {
 .page-nav {
   margin-top: 3%;
   @extend %centerFlex;
+  button {
+    border: none;
+    background-color: white;
+    box-shadow: none;
+    width: auto;
+  }
 }
 
 svg:hover {

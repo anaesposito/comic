@@ -5,6 +5,7 @@ const typeFilter = document.querySelector("#type");
 const orderFilter = document.querySelector("#order");
 const characterCardLayout = document.querySelector(".character-layout");
 const resultsPerPage = document.querySelector(".results-number");
+let totalOfData = "";
 
 // ------------------------- Beginning of Search
 const searchInput = document.querySelector("#search-input");
@@ -26,21 +27,22 @@ const searchURL = (typeOfOrder) => {
 // ------------------------- End of Search
 
 // ---------------------- Beginning of Cards Generations
-const displayingContent = (typeOfContent, typeOfOrder) => {
+const displayingContent = (typeOfContent, typeOfOrder, offset) => {
   fetch(
     `https://gateway.marvel.com:443/v1/public/${typeOfContent}?${searchURL(
       typeOfOrder
-    )}orderBy=${typeOfOrder}&apikey=5b28d7dfab933cb0faf686ed9e76a30a`
+    )}orderBy=${typeOfOrder}&apikey=5b28d7dfab933cb0faf686ed9e76a30a${offset}`
   )
     .then((res) => {
       return res.json();
     })
     .then((info) => {
       cardsGenerator(info);
+      totalOfData = info.data.total;
     });
 };
 
-displayingContent("comics", "title");
+displayingContent("comics", "title", "");
 // ----------------------  End of Cards Generations
 const getArticleInfo = (typeOfArticle, article) => {
   article.forEach((art) => {
@@ -207,23 +209,23 @@ const checkingFilterType = () => {
   }
 };
 
-const checkingTypeOfContent = () => {
+const checkingTypeOfContent = (offset) => {
   if (typeFilter.value === "comic") {
-    orderBy("comics", "title");
+    orderBy("comics", "title", offset);
   } else {
-    orderBy("characters", "name");
+    orderBy("characters", "name", offset);
   }
 };
 
-const orderBy = (type, order) => {
+const orderBy = (type, order, offset) => {
   if (orderFilter.value === "az") {
-    displayingContent(type, order);
+    displayingContent(type, order, offset);
   } else if (orderFilter.value === "za") {
-    displayingContent(type, `-${order}`);
+    displayingContent(type, `-${order}`, offset);
   } else if (orderFilter.value === "older") {
-    displayingContent(type, "-focDate");
+    displayingContent(type, "-focDate", offset);
   } else if (orderFilter.value === "newer") {
-    displayingContent(type, "focDate");
+    displayingContent(type, "focDate", offset);
   }
 };
 
@@ -295,3 +297,46 @@ const resetCardSection = () => {
 };
 
 //-------------💥Beginning of Pagination
+let actualPage = 0;
+let resultsPerPagePagination = 20;
+const firstPage = document.querySelector(".first-page");
+const previousPage = document.querySelector(".previous-page");
+const nextPage = document.querySelector(".next-page");
+const lastPage = document.querySelector(".last-page");
+let offset = 0;
+let offsetUpdate = actualPage * resultsPerPagePagination;
+let actualOffset = `&offset=${offsetUpdate}`;
+
+nextPage.onclick = () => {
+  actualPage++;
+  offsetUpdate = actualPage * resultsPerPagePagination;
+  actualOffset = `&offset=${offsetUpdate}`;
+  resetCardSection();
+  searchURL();
+  checkingTypeOfContent(actualOffset);
+};
+
+firstPage.onclick = () => {
+  displayingContent("comics", "title", "");
+};
+
+previousPage.onclick = () => {
+  actualPage--;
+  offsetUpdate = actualPage * resultsPerPagePagination;
+  actualOffset = `&offset=${offsetUpdate}`;
+  resetCardSection();
+  searchURL();
+  checkingTypeOfContent(actualOffset);
+};
+
+lastPage.onclick = () => {
+  let totalOfPages = totalOfData / resultsPerPagePagination;
+  let decimal = totalOfPages - Math.floor(totalOfPages);
+  let activePages = totalOfPages - decimal;
+  decimal > 0 ? (offsetUpdate = activePages) : (offsetUpdate = activePages - 1);
+  actualOffset = `&offset=${offsetUpdate}`;
+
+  resetCardSection();
+  searchURL();
+  checkingTypeOfContent(actualOffset);
+};
