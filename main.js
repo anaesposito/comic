@@ -28,6 +28,7 @@ const searchURL = (typeOfOrder) => {
 
 // ---------------------- Beginning of Cards Generations
 const displayingContent = (typeOfContent, typeOfOrder, offset) => {
+  offset == undefined ? (offset = "") : offset;
   fetch(
     `https://gateway.marvel.com:443/v1/public/${typeOfContent}?${searchURL(
       typeOfOrder
@@ -38,6 +39,7 @@ const displayingContent = (typeOfContent, typeOfOrder, offset) => {
     })
     .then((info) => {
       cardsGenerator(info);
+      console.log(info);
       totalOfData = info.data.total;
     });
 };
@@ -50,6 +52,7 @@ const getArticleInfo = (typeOfArticle, article) => {
       resetCardSection();
       let articleId = art.dataset.id;
       displayingArticleInfo(typeOfArticle, articleId);
+      generateThumbnails();
     };
   });
 };
@@ -261,7 +264,7 @@ const comicIndivualDisplay = (comic) => {
     comic.thumbnail.extension
   }"
           alt="${comic.title}">
-      <div>
+      <div class="detail-info">
           <h2>${comic.title}</h2>
           <h3>Publicado</h3>
           <p>${getComicDate(comic)}</p>
@@ -306,37 +309,70 @@ const lastPage = document.querySelector(".last-page");
 let offset = 0;
 let offsetUpdate = actualPage * resultsPerPagePagination;
 let actualOffset = `&offset=${offsetUpdate}`;
+let finalPage = false;
+
+const disableButtons = () => {
+  actualPage == 0
+    ? ((previousPage.disabled = true),
+      (previousPage.className = "previous-page hidden"))
+    : ((previousPage.disabled = false),
+      (previousPage.className = "previous-page"),
+      (firstPage.disabled = false),
+      (firstPage.className = "first-page"));
+
+  finalPage == true
+    ? ((nextPage.disabled = true),
+      (nextPage.className = "next-page hidden"),
+      (firstPage.disable = false),
+      (firstPage.className = "first-page"),
+      (previousPage.className = "previous-page"),
+      (previousPage.disabled = false))
+    : ((nextPage.disabled = false), (nextPage.className = "next-page"));
+};
+disableButtons();
 
 nextPage.onclick = () => {
-  actualPage++;
-  offsetUpdate = actualPage * resultsPerPagePagination;
+  finalPage = false;
+  actualPage = offsetUpdate + resultsPerPagePagination;
+  offsetUpdate = actualPage;
   actualOffset = `&offset=${offsetUpdate}`;
   resetCardSection();
   searchURL();
   checkingTypeOfContent(actualOffset);
+  disableButtons();
 };
 
 firstPage.onclick = () => {
   displayingContent("comics", "title", "");
+  disableButtons();
 };
 
 previousPage.onclick = () => {
-  actualPage--;
-  offsetUpdate = actualPage * resultsPerPagePagination;
+  finalPage = false;
+  actualPage = offsetUpdate - resultsPerPagePagination;
+  offsetUpdate = actualPage;
   actualOffset = `&offset=${offsetUpdate}`;
   resetCardSection();
   searchURL();
   checkingTypeOfContent(actualOffset);
+  disableButtons();
 };
 
 lastPage.onclick = () => {
   let totalOfPages = totalOfData / resultsPerPagePagination;
   let decimal = totalOfPages - Math.floor(totalOfPages);
   let activePages = totalOfPages - decimal;
-  decimal > 0 ? (offsetUpdate = activePages) : (offsetUpdate = activePages - 1);
-  actualOffset = `&offset=${offsetUpdate}`;
 
+  decimal > 0
+    ? (offsetUpdate = activePages * resultsPerPagePagination + 1)
+    : (offsetUpdate = activePages * resultsPerPagePagination);
+
+  finalPage = true;
+  actualPage = offsetUpdate;
+
+  actualOffset = `&offset=${offsetUpdate}`;
   resetCardSection();
   searchURL();
   checkingTypeOfContent(actualOffset);
+  disableButtons();
 };
