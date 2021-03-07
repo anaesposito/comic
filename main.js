@@ -4,6 +4,7 @@ const submitButton = document.querySelector("#form-submit-button");
 const typeFilter = document.querySelector("#type");
 const orderFilter = document.querySelector("#order");
 const characterCardLayout = document.querySelector(".character-layout");
+const resultsPerPage = document.querySelector(".results-number");
 
 // ------------------------- Beginning of Search
 const searchInput = document.querySelector("#search-input");
@@ -25,19 +26,7 @@ const searchURL = (typeOfOrder) => {
 // ------------------------- End of Search
 
 // ---------------------- Beginning of Cards Generations
-const displayingContent = (typeOfContent, typeOfOrder, searchInput) => {
-  // https://gateway.marvel.com:443/v1/public/characters?orderBy=name&apikey=
-  // https://gateway.marvel.com:443/v1/public/characters?nameStartsWith=spi&orderBy=name&apikey=
-  // https://gateway.marvel.com:443/v1/public/comics?titleStartsWith=spider&orderBy=title&apikey=
-
-  // characters/comics = typeOfContent
-  // name/title = typeOfOrder
-  // StartsWith = searchOrder (si hay busqueda sino null)
-  // searchInput = spider
-  // orderBy = typeOfOrder
-
-  // si hay busqueda este fech
-
+const displayingContent = (typeOfContent, typeOfOrder) => {
   fetch(
     `https://gateway.marvel.com:443/v1/public/${typeOfContent}?${searchURL(
       typeOfOrder
@@ -56,31 +45,12 @@ displayingContent("comics", "title");
 const getArticleInfo = (typeOfArticle, article) => {
   article.forEach((art) => {
     art.onclick = () => {
+      resetCardSection();
       let articleId = art.dataset.id;
       displayingArticleInfo(typeOfArticle, articleId);
     };
   });
 };
-// for the displayingArticleInfo
-const checkingTypeOfArticle = (typeOfArticle, info) => {
-  if (typeOfArticle === "comics") {
-    comicIndivualDisplay(info);
-  } else if (typeOfArticle === "characters") {
-    characterIndivualDisplay(info);
-  }
-};
-
-// const getTheDate = (content) => {
-//   let newDate = new Date(content.date);
-//   // console.log("cuantas fechas", content.date);
-//   // newDate.type === "focDate"
-//   //   ? (newDate = newDate.toLocaleDateString())
-//   //   : "Sin Fecha Disponible";
-
-//   // newDate = newDate.toLocaleDateString();
-//   console.log(newDate);
-//   return newDate;
-// };
 
 const displayingArticleInfo = (typeOfArticle, articleId) => {
   fetch(
@@ -90,20 +60,14 @@ const displayingArticleInfo = (typeOfArticle, articleId) => {
       return res.json();
     })
     .then((info) => {
-      info.data.results.map((info) => {
-        // characterIndivualDisplay(info);
-        checkingTypeOfArticle(typeOfArticle, info);
-        // comicIndivualDisplay
-      });
       info.data.results.map((content) => {
         typeOfArticle == "comics"
           ? getUriCollectionChars(content)
           : getUriCollectionComics(content);
 
-        // console.log("uri", content.characters.collectionURI);
-        // aca diferenciar comic de character y traer el uri del character.
-
-        // console.log("content", content);
+        typeOfArticle == "characters"
+          ? characterIndivualDisplay(content)
+          : comicIndivualDisplay(content);
       });
     });
 };
@@ -111,7 +75,6 @@ const getUriCollectionComics = (comic) => {
   let comicId = comic.comics.items;
   comicId.map((comic) => {
     let sourceOfComic = comic.resourceURI;
-    // console.log(sourceOfComic);
     displayingListOfArticles(sourceOfComic);
   });
 };
@@ -131,9 +94,15 @@ const displayingListOfArticles = (content) => {
     })
     .then((info) => {
       info.data.results.map((info) => {
-        content.includes("creators")
-          ? displayingCreatorsInfo(info)
-          : cardComicContent(info);
+        if (content.includes("creators")) {
+          displayingCreatorsInfo(info);
+        } else if (content.includes("characters")) {
+          cardCharacterContent(info);
+          getInfoChar();
+        } else {
+          cardComicContent(info);
+          getInfoComic();
+        }
       });
     });
 };
@@ -147,25 +116,46 @@ const displayingCreatorsInfo = (info) => {
 // --------------------------Beginning of Cards Generator for Comics
 const cardsGenerator = (info) => {
   comicsCardLayout.innerHTML = "";
+  resultsPerPage.innerHTML = info.data.results.length;
   if (checkingFilterType() === "comics") {
     info.data.results.map((content) => {
       cardComicContent(content);
+      getInfoComic();
     });
-    const comics = document.querySelectorAll(".comic-article");
-    getArticleInfo("comics", comics);
   } else {
     info.data.results.map((content) => {
       cardCharacterContent(content);
-    });
 
-    const characters = document.querySelectorAll(".character-article");
-    getArticleInfo("characters", characters);
-    generateThumbnails();
+      getInfoChar();
+    });
   }
+};
+
+const getInfoComic = () => {
+  const comics = document.querySelectorAll(".comic-article");
+
+  getArticleInfo("comics", comics);
+  generateThumbnails();
+};
+const getInfoChar = () => {
+  const characters = document.querySelectorAll(".character-article");
+
+  getArticleInfo("characters", characters);
+  generateThumbnails();
 };
 
 const generateThumbnails = () => {
   const thumbnails = document.querySelectorAll(".comic-thumbnail");
+  const charThumbnails = document.querySelectorAll(".char-thumbnail");
+
+  charThumbnails.forEach((content) => {
+    if (
+      content.src ==
+      "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
+    ) {
+      content.src = "img/notfound.png";
+    }
+  });
 
   thumbnails.forEach((content) => {
     if (
@@ -179,15 +169,19 @@ const generateThumbnails = () => {
 // ------------------------- End of Cards Generator for Comics
 
 const cardComicContent = (content) => {
-  return (comicsCardLayout.innerHTML += `<article class="comic-article"  data-id="${content.id}"> 
-  <img class="comic-thumbnail" src="${content.thumbnail.path}.${content.thumbnail.extension}" alt="">
-  <p class="comic-title">${content.title}</p>
+  return (comicsCardLayout.innerHTML += `<article class="comic-article"  data-id="${
+    content.id
+  }"> 
+  <img class="comic-thumbnail" src="${content.thumbnail.path}.${
+    content.thumbnail.extension
+  }" alt="">
+  <p class="comic-title">${content.title ? content.title : content.name}</p>
 </article>`);
 };
 
 const cardCharacterContent = (character) => {
   return (comicsCardLayout.innerHTML += `  <article class="character-article" data-id="${character.id}">
-  <img class="comic-thumbnail" src="${character.thumbnail.path}.${character.thumbnail.extension}"
+  <img class="char-thumbnail" src="${character.thumbnail.path}.${character.thumbnail.extension}"
       alt="">
   <div class="background-char-title">
       <p class="character-title">${character.name}</p>
@@ -236,6 +230,7 @@ const orderBy = (type, order) => {
 //-------------💥Beginning of Character Displayed
 
 const characterIndivualDisplay = (char) => {
+  resultsPerPage.innerHTML = char.comics.items.length;
   comicsCardLayout.innerHTML = "";
   characterCardLayout.innerHTML += `   
   <article class="char-content">
@@ -252,13 +247,11 @@ const characterIndivualDisplay = (char) => {
 
 //-------------💥Beginning of Comic Displayed
 const comicIndivualDisplay = (comic) => {
-  console.log(comic);
+  resultsPerPage.innerHTML = comic.characters.items.length;
   let fullName = "";
-  getUriCollectionChars(comic);
+
   getUriCreators(comic);
 
-  // console.log("probando uri", getUriCollectionChars(comic));
-  // console.log(displayingListOfArticles(comic));
   comicsCardLayout.innerHTML = "";
   characterCardLayout.innerHTML += `   
   <article class="article-content">
@@ -301,10 +294,4 @@ const resetCardSection = () => {
   characterCardLayout.innerHTML = "";
 };
 
-// const replaceEmptyTitle = () => {
-//   const characterName = document.querySelector(".char-name");
-//   console.log(characterName);
-//   if (characterName.textContent === "undefined") {
-//     characterName.textContent = "Sin Nombre";
-//   }
-// };
+//-------------💥Beginning of Pagination

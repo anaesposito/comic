@@ -100,7 +100,7 @@ main {
 .explorer {
   @extend %centerFlex;
   flex-direction: column;
-  margin: auto;
+
   margin-top: 4%;
   h2 {
     margin: auto;
@@ -271,6 +271,7 @@ svg:hover {
   display: flex;
   img,
   h2,
+  h3,
   p {
     @extend %margins;
   }

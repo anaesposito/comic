@@ -12,9 +12,11 @@
 
 .char-content img,
 .char-content h2,
+.char-content h3,
 .char-content p,
 .article-content img,
 .article-content h2,
+.article-content h3,
 .article-content p, .search,
 .results {
   margin: 40px 0 40px 80px;
@@ -86,7 +88,6 @@ main {
 
 .explorer {
   flex-direction: column;
-  margin: auto;
   margin-top: 4%;
 }
 .explorer h2 {
