@@ -14,6 +14,7 @@ $thirdColor: white;
   justify-content: center;
 }
 %rowFlex {
+  // no es necesario aclarar row, ya que viene por defecto
   flex-direction: row;
   flex-wrap: wrap;
 }
@@ -21,6 +22,7 @@ $thirdColor: white;
   margin: 40px 0 40px 80px;
 }
 
+// no usas este mixin en ningun lugar: mejor borrarlo
 %zeroMargins {
   margin: 0;
 }
