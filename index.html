@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- la web esta en español! -->
 <html lang="en">
 
 <head>
@@ -25,7 +26,6 @@
 
     <main>
         <section class="explorer">
-
             <div class="search">
                 <h2>Búsqueda</h2>
             </div>
@@ -33,6 +33,10 @@
                 <div class="search-background">
                     <form action="">
                         <label for="search">
+                            <!-- este placeholder con espacios es para darle lugar a la lupa?
+                            eso lo podes resolver con padding-right, mejor que esto
+                            nunca arreglamos con HTML cuestiones de estilo, eso 
+                            es responsabilidad de css -->
                             <input id="search-input" type="search" aria-label="search"
                                 placeholder="       Escribe aquí tu búsqueda">
 
@@ -49,6 +53,9 @@
                 </div>
                 <div id="order-content">
                     <label for="order">Orden
+                        <!-- tenemos aqui un solo select. Fijate que en el modelo
+                        el select cambia, de acuerdo a si elegimos personaje o comic
+                        En personaje hay menos opciones -->
                         <select name="order" id="order">
                             <option value="az">A-Z</option>
                             <option value="za">Z-A</option>
@@ -83,8 +90,10 @@
 
         </section>
 
+        <!-- esto no es un footer! puede ser un nav o un aside-->
         <footer class="page-nav">
             <div>
+                <!-- esta desprolijo el identado aqui -->
                 <button class="first-page">
                     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 226 226"
                         style=" fill:#000000;">

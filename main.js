@@ -10,6 +10,13 @@ let totalOfData = "";
 // ------------------------- Beginning of Search
 const searchInput = document.querySelector("#search-input");
 
+// deberiamos retornar explicitamente un false,
+// no dejar que se retorne undefined en caso negativo
+// Podriamos mejorar el codigo asi:
+// const thereIsSearch = () => {
+//   return Boolean(searchInput.value)
+// };
+// que retorna true si el string tiene contenido, y false en caso contrario
 const thereIsSearch = () => {
   if (searchInput.value) {
     return true;
@@ -28,6 +35,7 @@ const searchURL = (typeOfOrder) => {
 
 // ---------------------- Beginning of Cards Generations
 const displayingContent = (typeOfContent, typeOfOrder, offset) => {
+  // alternativa: offset = String(offset)
   offset == undefined ? (offset = "") : offset;
   fetch(
     `https://gateway.marvel.com:443/v1/public/${typeOfContent}?${searchURL(
@@ -39,6 +47,7 @@ const displayingContent = (typeOfContent, typeOfOrder, offset) => {
     })
     .then((info) => {
       cardsGenerator(info);
+      // no dejes console log en entregas!
       console.log(info);
       totalOfData = info.data.total;
     });
@@ -58,6 +67,7 @@ const getArticleInfo = (typeOfArticle, article) => {
 };
 
 const displayingArticleInfo = (typeOfArticle, articleId) => {
+  console.log("Artcie")
   fetch(
     `https://gateway.marvel.com:443/v1/public/${typeOfArticle}/${articleId}?apikey=5b28d7dfab933cb0faf686ed9e76a30a`
   )
@@ -65,7 +75,16 @@ const displayingArticleInfo = (typeOfArticle, articleId) => {
       return res.json();
     })
     .then((info) => {
+      console.log(info.data)
+      console.log(typeOfArticle)
       info.data.results.map((content) => {
+        // esta logica es muy poco clara
+        // si typeOfArticle es comic, ejecuto getUriCollectionChars, 
+        // si no, ejecuto getUriCollectionComics
+        // Despues nos fijamos si typeOfArticle es characters, si lo es ejecutamos 
+        // characterIndivualDisplay, si no comicIndivualDisplay
+        // no podemos unir ambas cosas en un solo condicional? 
+        // por que chequeamos dos veces typeOfArticle?
         typeOfArticle == "comics"
           ? getUriCollectionChars(content)
           : getUriCollectionComics(content);
@@ -78,6 +97,9 @@ const displayingArticleInfo = (typeOfArticle, articleId) => {
 };
 const getUriCollectionComics = (comic) => {
   let comicId = comic.comics.items;
+// aca estamos haciendo un map sobre comics.items, por que no usamos
+// comics.collectionURI que tiene toda esta info? por cada personaje estas
+// haciendo 10 o 20 fetch, uno por cada comic!
   comicId.map((comic) => {
     let sourceOfComic = comic.resourceURI;
     displayingListOfArticles(sourceOfComic);
@@ -92,12 +114,15 @@ const getUriCollectionChars = (content) => {
   displayingListOfArticles(content.characters.collectionURI);
 };
 
+// este nombre se puede mejorar, no es claro lo que hace esta funcion
 const displayingListOfArticles = (content) => {
+  console.log(content)
   fetch(`${content}?apikey=5b28d7dfab933cb0faf686ed9e76a30a`)
     .then((res) => {
       return res.json();
     })
     .then((info) => {
+      console.log(info.data.results)
       info.data.results.map((info) => {
         if (content.includes("creators")) {
           displayingCreatorsInfo(info);
@@ -155,6 +180,8 @@ const generateThumbnails = () => {
 
   charThumbnails.forEach((content) => {
     if (
+      // alternativa: 
+      // content.src.contains("image_not_available")
       content.src ==
       "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
     ) {
@@ -174,6 +201,8 @@ const generateThumbnails = () => {
 // ------------------------- End of Cards Generator for Comics
 
 const cardComicContent = (content) => {
+  // dejamos el alt vacio solo para imagenes decorativas
+  // aqui debe tener el nombre del comic
   return (comicsCardLayout.innerHTML += `<article class="comic-article"  data-id="${
     content.id
   }"> 
@@ -314,6 +343,7 @@ let finalPage = false;
 const disableButtons = () => {
   actualPage == 0
     ? ((previousPage.disabled = true),
+    // aqui firstPage deberia estar disabled
       (previousPage.className = "previous-page hidden"))
     : ((previousPage.disabled = false),
       (previousPage.className = "previous-page"),
